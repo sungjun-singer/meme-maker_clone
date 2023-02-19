@@ -1,3 +1,4 @@
+const modeBtn = document.getElementById("mode-btn");
 const colorOption = Array.from(
     document.getElementsByClassName("color-option")
 ); // 그냥 클래스를 가져온다면 HTMLCollection으로 나오기 때문에 Array.from으로 배열로 변경시킴
@@ -9,6 +10,7 @@ canvas.width = 500; // 가로길이 500
 canvas.height = 500; // 세로길이 500
 ctx.lineWidth = lineWidth.value; // 붓의 굵기는 lineWidth의 슬라이드의 값.
 let isPainting = false; // 잉크가 나오는지 안나오는지 결정하기 위한 변수 생성
+let fillingMode = true;
 
 function onMove(event){ // 마우스를 이동하면서 그릴수 있게 하는 함수
     if(isPainting){ // isPainting이 true일때 동작
@@ -43,15 +45,36 @@ function onColorClick(event){ // 팔레트를 눌렀을때 색이 변경되게 �
 function setColor(event){ // 색을 변경하는 함수.
     const colorValue = event.target.dataset.color;
     const value = event.target.value;
+    
     if(colorValue === undefined){ // 팔레트를 안눌렀을때는 color로 색깔변경.
         ctx.strokeStyle = value;
         ctx.fillStyle = value;
+        color.value =value
     }else{ // 팔레트로 눌렀을때는 팔레트 색깔로 변경.
         ctx.strokeStyle = colorValue;
         ctx.fillStyle = colorValue;
+        color.value = colorValue;
     }
 }
 
+function onModeClick(event){
+    if(fillingMode){
+        fillingMode = false;
+        modeBtn.innerText = "Stroke"
+    }else{
+        fillingMode = true;
+        isPainting = false;
+        modeBtn.innerText = "Fill"
+    }
+}
+
+function onCanvasClick(){
+    if(fillingMode){
+        ctx.fillRect(0,0,500,500);
+    }
+}
+
+canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
@@ -63,3 +86,5 @@ color.addEventListener("change", onColorChange);
 colorOption.forEach((color) => {
     color.addEventListener("click", onColorClick);
 })
+
+modeBtn.addEventListener("click", onModeClick);
