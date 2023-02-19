@@ -1,4 +1,6 @@
 const modeBtn = document.getElementById("mode-btn");
+const destroyBtn = document.getElementById("destroy-btn");
+const eraseBtn = document.getElementById("erase-btn");
 const colorOption = Array.from(
     document.getElementsByClassName("color-option")
 ); // 그냥 클래스를 가져온다면 HTMLCollection으로 나오기 때문에 Array.from으로 배열로 변경시킴
@@ -6,8 +8,12 @@ const color = document.querySelector("#color"); // id가 color인 것 가져옴 
 const lineWidth = document.querySelector("#line-width"); // id가 line-width인 것 가져옴 (input type="range")
 const canvas = document.querySelector("canvas"); // canvas태그를 가져옴
 const ctx = canvas.getContext("2d") // canvas.getContext를 사용해서 렌더링 컨텍스트를 가져와 여라가지 드로잉을 가능하게 함.
-canvas.width = 500; // 가로길이 500
-canvas.height = 500; // 세로길이 500
+
+const CANVAS_WIDTH = 500;
+const CANVAS_HEIGHT = 500;
+
+canvas.width = CANVAS_WIDTH; // 가로길이 500
+canvas.height = CANVAS_HEIGHT; // 세로길이 500
 ctx.lineWidth = lineWidth.value; // 붓의 굵기는 lineWidth의 슬라이드의 값.
 let isPainting = false; // 잉크가 나오는지 안나오는지 결정하기 위한 변수 생성
 let fillingMode = true;
@@ -70,8 +76,18 @@ function onModeClick(event){
 
 function onCanvasClick(){
     if(fillingMode){
-        ctx.fillRect(0,0,500,500);
+        ctx.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
     }
+}
+
+function onDestroyClick(){
+    ctx.fillStyle = "white";
+    ctx.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+}
+
+function onEraseClick(){
+    ctx.strokeStyle = "white";
+    ctx.stroke();
 }
 
 canvas.addEventListener("click", onCanvasClick);
@@ -88,3 +104,5 @@ colorOption.forEach((color) => {
 })
 
 modeBtn.addEventListener("click", onModeClick);
+destroyBtn.addEventListener("click", onDestroyClick);
+eraseBtn.addEventListener("click", onEraseClick);
