@@ -1,3 +1,4 @@
+const savaBtn = document.getElementById("save");
 const textInput = document.getElementById("text")
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
@@ -115,6 +116,14 @@ function onDbClick(event){
     }
 }
 
+function onSaveClick(){
+    const url = canvas.toDataURL();
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "myDrawing.png";
+    a.click();
+}
+
 canvas.addEventListener("dblclick", onDbClick);
 canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("mousemove", onMove);
@@ -133,3 +142,4 @@ modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraseBtn.addEventListener("click", onEraseClick);
 fileInput.addEventListener("change", onFileChange);
+savaBtn.addEventListener("click", onSaveClick);
