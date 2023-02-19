@@ -1,3 +1,4 @@
+const textInput = document.getElementById("text")
 const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
 const destroyBtn = document.getElementById("destroy-btn");
@@ -16,8 +17,9 @@ const CANVAS_HEIGHT = 500;
 canvas.width = CANVAS_WIDTH; // 가로길이 500
 canvas.height = CANVAS_HEIGHT; // 세로길이 500
 ctx.lineWidth = lineWidth.value; // 붓의 굵기는 lineWidth의 슬라이드의 값.
+ctx.lineCap = "round"; // 선을 둥글게 만들어주는 코드.
 let isPainting = false; // 잉크가 나오는지 안나오는지 결정하기 위한 변수 생성
-let fillingMode = true;
+let fillingMode = false;
 
 function onMove(event){ // 마우스를 이동하면서 그릴수 있게 하는 함수
     if(isPainting){ // isPainting이 true일때 동작
@@ -67,7 +69,7 @@ function setColor(event){ // 색을 변경하는 함수.
 function onModeClick(event){
     if(fillingMode){
         fillingMode = false;
-        modeBtn.innerText = "Stroke"
+        modeBtn.innerText = "Draw"
     }else{
         fillingMode = true;
         isPainting = false;
@@ -102,6 +104,18 @@ function onFileChange(event){
     }
 }
 
+function onDbClick(event){
+    const text = textInput.value;
+    if(text !== ""){
+        ctx.save();
+        ctx.lineWidth = 1;
+        ctx.font = "68px serif";
+        ctx.fillText(text, event.offsetX, event.offsetY);
+        ctx.restore();
+    }
+}
+
+canvas.addEventListener("dblclick", onDbClick);
 canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
