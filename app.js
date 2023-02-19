@@ -1,3 +1,4 @@
+const fileInput = document.getElementById("file");
 const modeBtn = document.getElementById("mode-btn");
 const destroyBtn = document.getElementById("destroy-btn");
 const eraseBtn = document.getElementById("erase-btn");
@@ -90,6 +91,17 @@ function onEraseClick(){
     ctx.stroke();
 }
 
+function onFileChange(event){
+    const file = event.target.files[0];
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.src = url;
+    image.onload = function(){
+        ctx.drawImage(image, 0, 0, 500, 500);
+        fileInput.value = null;
+    }
+}
+
 canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -106,3 +118,4 @@ colorOption.forEach((color) => {
 modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraseBtn.addEventListener("click", onEraseClick);
+fileInput.addEventListener("change", onFileChange);
